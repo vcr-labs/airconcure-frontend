@@ -8,4 +8,5 @@ export { Input } from './Input';
 export { ProviderCard } from './ProviderCard';
 export { ScreenHeader } from './ScreenHeader';
 export { ServiceCard } from './ServiceCard';
+export { ServiceCategoryCard } from './ServiceCategoryCard';
 export { StatusBadge } from './StatusBadge';

@@ -42,7 +42,7 @@ export default function ClientBookingsScreen() {
         <EmptyState
           icon="calendar-outline"
           title="No bookings yet"
-          message="Browse providers and book your first aircon cleaning service."
+          message="Post a job to get started with your first aircon service."
         />
       </View>
     );
@@ -66,6 +66,11 @@ export default function ClientBookingsScreen() {
                   booking={booking}
                   serviceName={service?.name ?? 'Service'}
                   otherPartyName={provider?.name ?? 'Provider'}
+                  statusHint={
+                    booking.status === 'pending'
+                      ? 'Waiting for provider to accept'
+                      : undefined
+                  }
                 />
               );
             })}

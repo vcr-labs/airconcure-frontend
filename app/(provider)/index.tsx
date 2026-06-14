@@ -45,7 +45,7 @@ export default function ProviderDashboardScreen() {
       <View style={styles.statsRow}>
         <Card style={styles.statCard}>
           <Text style={styles.statValue}>{stats.pending}</Text>
-          <Text style={styles.statLabel}>Pending</Text>
+          <Text style={styles.statLabel}>Awaiting Response</Text>
         </Card>
         <Card style={styles.statCard}>
           <Text style={styles.statValue}>{stats.today}</Text>
@@ -57,7 +57,7 @@ export default function ProviderDashboardScreen() {
         </Card>
       </View>
 
-      <Text style={styles.sectionTitle}>Upcoming Bookings</Text>
+      <Text style={styles.sectionTitle}>Upcoming Job Requests</Text>
       <FlatList
         data={upcoming}
         keyExtractor={(item) => item.id}
@@ -74,7 +74,7 @@ export default function ProviderDashboardScreen() {
         }}
         ListEmptyComponent={
           <Card>
-            <Text style={styles.emptyText}>No upcoming bookings</Text>
+            <Text style={styles.emptyText}>No upcoming job requests</Text>
           </Card>
         }
         contentContainerStyle={styles.list}

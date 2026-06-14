@@ -36,12 +36,16 @@ export default function ClientLayout() {
         }}
       />
       <Tabs.Screen
-        name="provider/[id]"
-        options={{ href: null, headerShown: true, title: 'Provider' }}
+        name="post-job"
+        options={{ href: null, headerShown: true, title: 'Post a Job' }}
       />
       <Tabs.Screen
-        name="book/[providerId]"
-        options={{ href: null, headerShown: true, title: 'Book Service' }}
+        name="choose-provider"
+        options={{ href: null, headerShown: true, title: 'Choose Provider' }}
+      />
+      <Tabs.Screen
+        name="confirm-booking"
+        options={{ href: null, headerShown: true, title: 'Confirm Booking' }}
       />
     </Tabs>
   );

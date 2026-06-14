@@ -54,15 +54,15 @@ export default function ProviderBookingsScreen() {
   if (providerBookings.length === 0) {
     return (
       <View style={styles.container}>
-        <ScreenHeader title="Bookings" />
-        <EmptyState icon="calendar-outline" title="No bookings yet" message="New booking requests will appear here." />
+        <ScreenHeader title="Job Requests" />
+        <EmptyState icon="calendar-outline" title="No job requests yet" message="New job requests from clients will appear here." />
       </View>
     );
   }
 
   return (
     <View style={styles.container}>
-      <ScreenHeader title="Bookings" subtitle={`${providerBookings.length} total`} />
+      <ScreenHeader title="Job Requests" subtitle={`${providerBookings.length} total`} />
       <FlatList
         data={providerBookings}
         keyExtractor={(item) => item.id}

@@ -9,6 +9,7 @@ interface BookingCardProps {
   booking: Booking;
   serviceName: string;
   otherPartyName: string;
+  statusHint?: string;
   onPress?: () => void;
 }
 
@@ -16,6 +17,7 @@ export function BookingCard({
   booking,
   serviceName,
   otherPartyName,
+  statusHint,
   onPress,
 }: BookingCardProps) {
   const content = (
@@ -25,6 +27,7 @@ export function BookingCard({
         <StatusBadge status={booking.status} />
       </View>
       <Text style={styles.party}>{otherPartyName}</Text>
+      {statusHint && <Text style={styles.hint}>{statusHint}</Text>}
       <Text style={styles.date}>
         {format(new Date(booking.scheduledAt), 'EEE, MMM d, yyyy · h:mm a')}
       </Text>
@@ -53,6 +56,7 @@ const styles = StyleSheet.create({
   },
   service: { ...typography.h3, color: colors.text, flex: 1, marginRight: spacing.sm },
   party: { ...typography.bodySmall, color: colors.textSecondary },
+  hint: { ...typography.caption, color: colors.textMuted, fontStyle: 'italic', marginTop: 2 },
   date: { ...typography.bodySmall, color: colors.text, marginTop: 4, fontWeight: '500' },
   address: { ...typography.caption, color: colors.textMuted, marginTop: 2 },
   footer: { marginTop: spacing.sm, paddingTop: spacing.sm, borderTopWidth: 1, borderTopColor: colors.border },

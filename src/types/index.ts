@@ -54,3 +54,12 @@ export interface OnboardingSlide {
   description: string;
   icon: string;
 }
+
+export interface JobRequestDraft {
+  category: ServiceCategory;
+  address: string;
+  notes?: string;
+  scheduledAt: string;
+  providerId?: string;
+  serviceId?: string;
+}

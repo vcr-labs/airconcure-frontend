@@ -8,10 +8,11 @@ import { Card } from './Card';
 interface ProviderCardProps {
   provider: Provider;
   startingPrice: number;
+  matchedServiceName?: string;
   onPress: () => void;
 }
 
-export function ProviderCard({ provider, startingPrice, onPress }: ProviderCardProps) {
+export function ProviderCard({ provider, startingPrice, matchedServiceName, onPress }: ProviderCardProps) {
   return (
     <Pressable onPress={onPress}>
       <Card style={styles.card}>
@@ -33,8 +34,13 @@ export function ProviderCard({ provider, startingPrice, onPress }: ProviderCardP
           </View>
         </View>
         <View style={styles.footer}>
-          <Text style={styles.price}>From ₱{startingPrice.toLocaleString()}</Text>
-          <Text style={styles.cta}>View Services →</Text>
+          <View>
+            <Text style={styles.price}>₱{startingPrice.toLocaleString()}</Text>
+            {matchedServiceName && (
+              <Text style={styles.serviceName}>{matchedServiceName}</Text>
+            )}
+          </View>
+          <Text style={styles.cta}>Select Provider →</Text>
         </View>
       </Card>
     </Pressable>
@@ -60,5 +66,6 @@ const styles = StyleSheet.create({
     borderTopColor: colors.border,
   },
   price: { ...typography.label, color: colors.primary },
+  serviceName: { ...typography.caption, color: colors.textSecondary, marginTop: 2 },
   cta: { ...typography.bodySmall, color: colors.secondary, fontWeight: '600' },
 });
