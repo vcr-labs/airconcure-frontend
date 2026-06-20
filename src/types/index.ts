@@ -21,6 +21,8 @@ export interface Service {
 
 export type ServiceCategory = 'deep_clean' | 'maintenance' | 'repair';
 
+export type BookingSelectionMode = 'auto' | 'manual';
+
 export interface Provider extends User {
   role: 'provider';
   rating: number;

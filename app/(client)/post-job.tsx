@@ -1,11 +1,14 @@
 import { useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useForm, Controller } from 'react-hook-form';
 import { format, addDays } from 'date-fns';
+import { mockProviders } from '@/src/data/mock';
 import { useJobRequestStore } from '@/src/stores/jobRequestStore';
+import { useServiceStore } from '@/src/stores/serviceStore';
 import { Button, Input } from '@/src/components';
 import { getCategoryLabel } from '@/src/constants/serviceTypes';
+import { pickBestProvider } from '@/src/utils/matching';
 import { colors, spacing, typography } from '@/src/constants/theme';
 
 interface PostJobForm {
@@ -19,7 +22,10 @@ const TIME_SLOTS = ['09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00
 export default function PostJobScreen() {
   const router = useRouter();
   const draft = useJobRequestStore((s) => s.draft);
+  const selectionMode = useJobRequestStore((s) => s.selectionMode);
   const setDetails = useJobRequestStore((s) => s.setDetails);
+  const setProvider = useJobRequestStore((s) => s.setProvider);
+  const services = useServiceStore((s) => s.services);
 
   const [selectedDate, setSelectedDate] = useState(DATE_OPTIONS[0]);
   const [selectedTime, setSelectedTime] = useState(TIME_SLOTS[0]);
@@ -28,7 +34,7 @@ export default function PostJobScreen() {
     defaultValues: { address: draft.address ?? '', notes: draft.notes ?? '' },
   });
 
-  if (!draft.category) {
+  if (!selectionMode || !draft.category) {
     router.replace('/(client)');
     return null;
   }
@@ -44,8 +50,25 @@ export default function PostJobScreen() {
       scheduledAt: scheduled.toISOString(),
     });
 
-    router.push('./choose-provider');
+    if (selectionMode === 'manual') {
+      router.push('./choose-provider');
+      return;
+    }
+
+    const best = pickBestProvider(draft.category!, mockProviders, services);
+    if (!best) {
+      Alert.alert(
+        'No cleaners available',
+        `No providers found for ${getCategoryLabel(draft.category!)}. Try a different service type.`
+      );
+      return;
+    }
+
+    setProvider(best.provider.id, best.matchingServices[0].id);
+    router.push('./confirm-booking');
   };
+
+  const submitLabel = selectionMode === 'auto' ? 'Find Me a Cleaner' : 'Find Providers';
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
@@ -110,7 +133,7 @@ export default function PostJobScreen() {
         )}
       />
 
-      <Button title="Find Providers" onPress={handleSubmit(onSubmit)} />
+      <Button title={submitLabel} onPress={handleSubmit(onSubmit)} />
     </ScrollView>
   );
 }

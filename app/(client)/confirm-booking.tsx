@@ -15,6 +15,7 @@ export default function ConfirmBookingScreen() {
   const router = useRouter();
   const user = useAuthStore((s) => s.user);
   const draft = useJobRequestStore((s) => s.draft);
+  const selectionMode = useJobRequestStore((s) => s.selectionMode);
   const reset = useJobRequestStore((s) => s.reset);
   const setProvider = useJobRequestStore((s) => s.setProvider);
   const createBooking = useBookingStore((s) => s.createBooking);
@@ -73,6 +74,10 @@ export default function ConfirmBookingScreen() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <Text style={styles.heading}>Confirm Booking</Text>
+
+      {selectionMode === 'auto' && (
+        <Text style={styles.matchedLabel}>Matched cleaner for you</Text>
+      )}
 
       <View style={styles.providerRow}>
         <Avatar name={provider.name} uri={provider.avatar} size={48} />
@@ -142,6 +147,13 @@ const styles = StyleSheet.create({
   content: { padding: spacing.md, paddingBottom: spacing.xxl },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   heading: { ...typography.h2, color: colors.text, marginBottom: spacing.lg },
+  matchedLabel: {
+    ...typography.bodySmall,
+    color: colors.primary,
+    fontWeight: '600',
+    marginBottom: spacing.sm,
+    marginTop: -spacing.sm,
+  },
   providerRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, marginBottom: spacing.lg },
   providerInfo: { flex: 1 },
   providerName: { ...typography.h3, color: colors.text },

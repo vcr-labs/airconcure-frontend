@@ -12,6 +12,7 @@ import { colors, spacing } from '@/src/constants/theme';
 export default function ChooseProviderScreen() {
   const router = useRouter();
   const draft = useJobRequestStore((s) => s.draft);
+  const selectionMode = useJobRequestStore((s) => s.selectionMode);
   const setProvider = useJobRequestStore((s) => s.setProvider);
   const services = useServiceStore((s) => s.services);
 
@@ -20,7 +21,7 @@ export default function ChooseProviderScreen() {
     return getMatchingProviders(draft.category, mockProviders, services);
   }, [draft.category, services]);
 
-  if (!draft.category || !draft.address || !draft.scheduledAt) {
+  if (selectionMode !== 'manual' || !draft.category || !draft.address || !draft.scheduledAt) {
     router.replace('/(client)');
     return null;
   }

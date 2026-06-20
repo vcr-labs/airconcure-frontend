@@ -23,3 +23,12 @@ export function getMatchingProviders(
     .filter((item): item is MatchedProvider => item !== null)
     .sort((a, b) => b.provider.rating - a.provider.rating);
 }
+
+export function pickBestProvider(
+  category: ServiceCategory,
+  providers: Provider[],
+  services: Service[]
+): MatchedProvider | null {
+  const matches = getMatchingProviders(category, providers, services);
+  return matches[0] ?? null;
+}

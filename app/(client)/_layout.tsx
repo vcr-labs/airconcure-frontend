@@ -36,6 +36,10 @@ export default function ClientLayout() {
         }}
       />
       <Tabs.Screen
+        name="select-service"
+        options={{ href: null, headerShown: true, title: 'Select Service' }}
+      />
+      <Tabs.Screen
         name="post-job"
         options={{ href: null, headerShown: true, title: 'Post a Job' }}
       />

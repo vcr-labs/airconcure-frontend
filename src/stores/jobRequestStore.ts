@@ -1,8 +1,10 @@
 import { create } from 'zustand';
-import { JobRequestDraft, ServiceCategory } from '@/src/types';
+import { BookingSelectionMode, JobRequestDraft, ServiceCategory } from '@/src/types';
 
 interface JobRequestState {
   draft: Partial<JobRequestDraft>;
+  selectionMode: BookingSelectionMode | null;
+  setSelectionMode: (mode: BookingSelectionMode) => void;
   setCategory: (category: ServiceCategory) => void;
   setDetails: (details: {
     address: string;
@@ -15,6 +17,13 @@ interface JobRequestState {
 
 export const useJobRequestStore = create<JobRequestState>((set) => ({
   draft: {},
+  selectionMode: null,
+
+  setSelectionMode: (mode) =>
+    set({
+      selectionMode: mode,
+      draft: {},
+    }),
 
   setCategory: (category) =>
     set((state) => ({ draft: { ...state.draft, category } })),
@@ -25,5 +34,5 @@ export const useJobRequestStore = create<JobRequestState>((set) => ({
   setProvider: (providerId, serviceId) =>
     set((state) => ({ draft: { ...state.draft, providerId, serviceId } })),
 
-  reset: () => set({ draft: {} }),
+  reset: () => set({ draft: {}, selectionMode: null }),
 }));
