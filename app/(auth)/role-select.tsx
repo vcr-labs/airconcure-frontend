@@ -43,7 +43,7 @@ export default function RoleSelectScreen() {
             </View>
             <Text style={styles.cardTitle}>I offer services</Text>
             <Text style={styles.cardDesc}>
-              Manage your services, accept bookings, and grow your business.
+              Accept bookings, manage your schedule, and grow your business.
             </Text>
           </View>
         </Pressable>
