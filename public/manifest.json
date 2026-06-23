@@ -1,0 +1,21 @@
+{
+  "short_name": "AirConCure",
+  "name": "AirConCure",
+  "description": "Book aircon cleaning and maintenance services",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#0D9488",
+  "background_color": "#F0F9FF"
+}
