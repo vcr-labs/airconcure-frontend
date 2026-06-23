@@ -1,11 +1,17 @@
 import { useEffect } from 'react';
 import { useRouter, useSegments } from 'expo-router';
 import { useAuthStore } from '@/src/stores/authStore';
+import {
+  getAuthEntryRoute,
+  getHomeRoute,
+  isClientApp,
+  isProviderApp,
+} from '@/src/constants/appVariant';
 
 export function useAuthRedirect() {
   const router = useRouter();
   const segments = useSegments();
-  const { isAuthenticated, hasCompletedOnboarding, role, isHydrated } = useAuthStore();
+  const { isAuthenticated, hasCompletedOnboarding, isHydrated } = useAuthStore();
 
   useEffect(() => {
     if (!isHydrated) return;
@@ -15,10 +21,12 @@ export function useAuthRedirect() {
     const inClientGroup = segmentList[0] === '(client)';
     const inProviderGroup = segmentList[0] === '(provider)';
     const onSplash = segmentList.length === 0;
+    const homeRoute = getHomeRoute();
+    const authEntryRoute = getAuthEntryRoute();
 
     if (!isAuthenticated) {
       if (!inAuthGroup && !onSplash) {
-        router.replace('/(auth)/role-select');
+        router.replace(authEntryRoute);
       }
       return;
     }
@@ -30,10 +38,10 @@ export function useAuthRedirect() {
       return;
     }
 
-    if (role === 'client' && !inClientGroup) {
-      router.replace('/(client)');
-    } else if (role === 'provider' && !inProviderGroup) {
-      router.replace('/(provider)');
+    if (isClientApp && (inProviderGroup || !inClientGroup)) {
+      router.replace(homeRoute);
+    } else if (isProviderApp && (inClientGroup || !inProviderGroup)) {
+      router.replace(homeRoute);
     }
-  }, [isAuthenticated, hasCompletedOnboarding, role, isHydrated, segments]);
+  }, [isAuthenticated, hasCompletedOnboarding, isHydrated, segments]);
 }

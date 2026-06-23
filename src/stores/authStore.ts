@@ -2,8 +2,9 @@ import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { User, UserRole } from '@/src/types';
 import { defaultClient, defaultProvider } from '@/src/data/mock';
+import { LOCKED_ROLE } from '@/src/constants/appVariant';
 
-const AUTH_KEY = 'airconcure_auth';
+const AUTH_KEY = `airconcure_auth_${LOCKED_ROLE}`;
 
 interface AuthState {
   user: User | null;
@@ -11,9 +12,7 @@ interface AuthState {
   isAuthenticated: boolean;
   hasCompletedOnboarding: boolean;
   isHydrated: boolean;
-  selectedRole: UserRole | null;
   hydrate: () => Promise<void>;
-  setSelectedRole: (role: UserRole) => void;
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, phone: string, password: string) => Promise<void>;
   completeOnboarding: () => Promise<void>;
@@ -39,13 +38,16 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   isAuthenticated: false,
   hasCompletedOnboarding: false,
   isHydrated: false,
-  selectedRole: null,
 
   hydrate: async () => {
     try {
       const raw = await AsyncStorage.getItem(AUTH_KEY);
       if (raw) {
         const data = JSON.parse(raw);
+        if (data.role !== LOCKED_ROLE) {
+          set({ isHydrated: true });
+          return;
+        }
         set({
           user: data.user,
           role: data.role,
@@ -61,10 +63,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     set({ isHydrated: true });
   },
 
-  setSelectedRole: (role) => set({ selectedRole: role }),
-
   login: async (email, _password) => {
-    const role = get().selectedRole ?? 'client';
+    const role = LOCKED_ROLE;
     const user: User =
       role === 'provider'
         ? { ...defaultProvider, email: email || defaultProvider.email }
@@ -80,7 +80,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   register: async (name, email, phone, _password) => {
-    const role = get().selectedRole ?? 'client';
+    const role = LOCKED_ROLE;
     const base = role === 'provider' ? defaultProvider : defaultClient;
     const user: User = { ...base, name, email, phone };
 
@@ -115,7 +115,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       role: null,
       isAuthenticated: false,
       hasCompletedOnboarding: false,
-      selectedRole: null,
     });
   },
 }));

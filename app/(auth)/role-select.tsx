@@ -1,49 +1,45 @@
+import { useEffect } from 'react';
 import { StyleSheet, Text, View, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import { useAuthStore } from '@/src/stores/authStore';
+import { isProviderApp } from '@/src/constants/appVariant';
 import { colors, spacing, typography, borderRadius, shadows } from '@/src/constants/theme';
-import { UserRole } from '@/src/types';
 
 export default function RoleSelectScreen() {
   const router = useRouter();
-  const setSelectedRole = useAuthStore((s) => s.setSelectedRole);
 
-  const handleSelect = (role: UserRole) => {
-    setSelectedRole(role);
+  useEffect(() => {
+    if (isProviderApp) {
+      router.replace('/(auth)/login');
+    }
+  }, []);
+
+  const handleSelectClient = () => {
     router.push('/(auth)/login');
   };
+
+  if (isProviderApp) {
+    return null;
+  }
 
   return (
     <LinearGradient colors={[colors.background, colors.primaryLight]} style={styles.container}>
       <View style={styles.header}>
         <Ionicons name="snow" size={48} color={colors.primary} />
         <Text style={styles.title}>Welcome to AirConCure</Text>
-        <Text style={styles.subtitle}>How would you like to use the app?</Text>
+        <Text style={styles.subtitle}>Book trusted aircon cleaning professionals near you.</Text>
       </View>
 
       <View style={styles.cards}>
-        <Pressable onPress={() => handleSelect('client')} style={styles.cardWrapper}>
+        <Pressable onPress={handleSelectClient} style={styles.cardWrapper}>
           <View style={styles.card}>
             <View style={[styles.iconCircle, { backgroundColor: colors.primaryLight }]}>
               <Ionicons name="home" size={32} color={colors.primary} />
             </View>
-            <Text style={styles.cardTitle}>I need cleaning</Text>
+            <Text style={styles.cardTitle}>Get Started</Text>
             <Text style={styles.cardDesc}>
               Find and book trusted aircon cleaning professionals near you.
-            </Text>
-          </View>
-        </Pressable>
-
-        <Pressable onPress={() => handleSelect('provider')} style={styles.cardWrapper}>
-          <View style={styles.card}>
-            <View style={[styles.iconCircle, { backgroundColor: '#DBEAFE' }]}>
-              <Ionicons name="construct" size={32} color={colors.secondary} />
-            </View>
-            <Text style={styles.cardTitle}>I offer services</Text>
-            <Text style={styles.cardDesc}>
-              Accept bookings, manage your schedule, and grow your business.
             </Text>
           </View>
         </Pressable>

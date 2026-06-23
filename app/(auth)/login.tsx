@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Pressable, KeyboardAvoidingView, Platform, Scro
 import { useRouter } from 'expo-router';
 import { useForm, Controller } from 'react-hook-form';
 import { useAuthStore } from '@/src/stores/authStore';
+import { isProviderApp } from '@/src/constants/appVariant';
 import { Button, Input } from '@/src/components';
 import { colors, spacing, typography } from '@/src/constants/theme';
 
@@ -14,7 +15,6 @@ interface LoginForm {
 export default function LoginScreen() {
   const router = useRouter();
   const login = useAuthStore((s) => s.login);
-  const selectedRole = useAuthStore((s) => s.selectedRole);
   const [loading, setLoading] = useState(false);
 
   const { control, handleSubmit, formState: { errors } } = useForm<LoginForm>({
@@ -38,7 +38,7 @@ export default function LoginScreen() {
     >
       <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
         <Text style={styles.heading}>
-          Sign in as {selectedRole === 'provider' ? 'Provider' : 'Client'}
+          Sign in as {isProviderApp ? 'Provider' : 'Client'}
         </Text>
         <Text style={styles.subheading}>
           Use any email and password to demo the app.

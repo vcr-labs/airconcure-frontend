@@ -3,6 +3,7 @@ import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useForm, Controller } from 'react-hook-form';
 import { useAuthStore } from '@/src/stores/authStore';
+import { getAuthEntryRoute } from '@/src/constants/appVariant';
 import { Avatar, Button, Card, Input, ScreenHeader } from '@/src/components';
 import { colors, spacing, typography } from '@/src/constants/theme';
 
@@ -36,12 +37,7 @@ export default function ClientProfileScreen() {
 
   const handleLogout = async () => {
     await logout();
-    router.replace('/(auth)/role-select');
-  };
-
-  const handleSwitchRole = async () => {
-    await logout();
-    router.replace('/(auth)/role-select');
+    router.replace(getAuthEntryRoute());
   };
 
   return (
@@ -84,7 +80,6 @@ export default function ClientProfileScreen() {
       />
 
       <Button title="Save Changes" onPress={handleSubmit(onSave)} loading={saving} style={styles.btn} />
-      <Button title="Switch Role" onPress={handleSwitchRole} variant="outline" style={styles.btn} />
       <Button title="Log Out" onPress={handleLogout} variant="danger" style={styles.btn} />
     </ScrollView>
   );

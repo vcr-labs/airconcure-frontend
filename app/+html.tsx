@@ -1,5 +1,6 @@
 import { ScrollViewStyleReset } from 'expo-router/html';
 import type { ReactNode } from 'react';
+import { getAppDisplayName } from '@/src/constants/appVariant';
 
 // This file is web-only and used to configure the root HTML for every
 // web page during static rendering.
@@ -16,7 +17,7 @@ export default function Root({ children }: { children: ReactNode }) {
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#0D9488" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-title" content="AirConCure" />
+        <meta name="apple-mobile-web-app-title" content={getAppDisplayName()} />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <script dangerouslySetInnerHTML={{ __html: swRegistration }} />
 

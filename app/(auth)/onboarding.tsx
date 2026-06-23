@@ -1,33 +1,28 @@
 import { useState } from 'react';
-import { StyleSheet, Text, View, Dimensions } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAuthStore } from '@/src/stores/authStore';
 import { clientOnboardingSlides, providerOnboardingSlides } from '@/src/constants/onboarding';
+import { getHomeRoute, isProviderApp } from '@/src/constants/appVariant';
 import { Button } from '@/src/components';
 import { colors, spacing, typography } from '@/src/constants/theme';
 
-const { width } = Dimensions.get('window');
-
 export default function OnboardingScreen() {
   const router = useRouter();
-  const role = useAuthStore((s) => s.role);
   const completeOnboarding = useAuthStore((s) => s.completeOnboarding);
   const [step, setStep] = useState(0);
 
-  const slides = role === 'provider' ? providerOnboardingSlides : clientOnboardingSlides;
+  const slides = isProviderApp ? providerOnboardingSlides : clientOnboardingSlides;
   const current = slides[step];
   const isLast = step === slides.length - 1;
+  const homeRoute = getHomeRoute();
 
   const handleNext = async () => {
     if (isLast) {
       await completeOnboarding();
-      if (role === 'provider') {
-        router.replace('/(provider)');
-      } else {
-        router.replace('/(client)');
-      }
+      router.replace(homeRoute);
     } else {
       setStep(step + 1);
     }
@@ -61,7 +56,7 @@ export default function OnboardingScreen() {
             title="Skip"
             onPress={async () => {
               await completeOnboarding();
-              router.replace(role === 'provider' ? '/(provider)' : '/(client)');
+              router.replace(homeRoute);
             }}
             variant="outline"
             style={styles.skipButton}

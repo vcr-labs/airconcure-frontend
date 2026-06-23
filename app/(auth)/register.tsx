@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Pressable, KeyboardAvoidingView, Platform, Scro
 import { useRouter } from 'expo-router';
 import { useForm, Controller } from 'react-hook-form';
 import { useAuthStore } from '@/src/stores/authStore';
+import { isProviderApp } from '@/src/constants/appVariant';
 import { Button, Input } from '@/src/components';
 import { colors, spacing, typography } from '@/src/constants/theme';
 
@@ -16,7 +17,6 @@ interface RegisterForm {
 export default function RegisterScreen() {
   const router = useRouter();
   const register = useAuthStore((s) => s.register);
-  const selectedRole = useAuthStore((s) => s.selectedRole);
   const [loading, setLoading] = useState(false);
 
   const { control, handleSubmit, formState: { errors } } = useForm<RegisterForm>({
@@ -40,7 +40,7 @@ export default function RegisterScreen() {
     >
       <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
         <Text style={styles.heading}>
-          Create {selectedRole === 'provider' ? 'Provider' : 'Client'} Account
+          Create {isProviderApp ? 'Provider' : 'Client'} Account
         </Text>
         <Text style={styles.subheading}>Fill in your details to get started.</Text>
 
